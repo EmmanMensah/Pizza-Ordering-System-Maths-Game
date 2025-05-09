@@ -344,8 +344,7 @@ class MathsGoon:
            "tick": "sounds/tick.wav",
            "complete": "sounds/complete.wav"
        }
-       # Uncomment the line below to play the sound in a real-world scenario
-       # playsound(sounds.get(sound_type, ""))
+      
 
 
 if __name__ == "__main__":
