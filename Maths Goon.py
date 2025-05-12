@@ -63,7 +63,7 @@ class Question:
 
 
 class Game:
-   def __init__(self, level='E'):
+   def __init__(self, level=0):
        self.level = level
        self.score = 0
        self.question_count = 0
@@ -111,23 +111,20 @@ class Game:
 class MathsGoon:
    def __init__(self, root):
        self.root = root
-       self.root.title("Maths Goon")
+       self.root.title("Maths Goon by emmanuel")
        self.root.geometry("400x500")
        self.root.resizable(False, False)
-       self.bg_color = "#FFFFFF"
-       self.primary_color = "#000000"
-       self.accent_color = "#007ACC"
-       self.secondary_color = "#555555"
-       self.success_color = "#4CAF50"
-       self.error_color = "#F44336"
+       self.bg_color = "#e0f7fa"
+       self.primary_color = "#3498db"
+       self.secondary_color = "#f1c40f"
+       self.success_color = "#2ecc71"
+       self.error_color = "#e74c3c"
        self.root.configure(bg=self.bg_color)
        self.game = None
        self.timer_id = None
        self.welcome_frame = Frame(self.root, bg=self.bg_color)
        self.game_frame = Frame(self.root, bg=self.bg_color)
        self.results_frame = Frame(self.root, bg=self.bg_color)
-       self.fps_counter = 0
-       self.last_fps_time = time.time()
        self.setup_welcome_screen()
        self.setup_game_screen()
        self.setup_results_screen()
@@ -135,57 +132,54 @@ class MathsGoon:
 
 
    def setup_welcome_screen(self):
-       Label(self.welcome_frame, text="Maths Goon", font=("Helvetica", 32, "bold"), bg=self.bg_color, fg=self.primary_color).pack(pady=20)
-       Label(self.welcome_frame, text="Simple and engaging maths practice.", font=("Helvetica", 16), bg=self.bg_color, fg=self.secondary_color).pack(pady=10)
-       Label(self.welcome_frame, text="Select Difficulty Level:", font=("Helvetica", 14), bg=self.bg_color, fg=self.primary_color).pack(pady=10)
+       Label(self.welcome_frame, text="MathsGoon", font=("Comic Sans MS", 32, "bold"), bg=self.bg_color, fg=self.primary_color).pack(pady=20)
+       Label(self.welcome_frame, text="Fun Math Practice for Kids!", font=("Comic Sans MS", 16), bg=self.bg_color, fg=self.secondary_color).pack(pady=10)
+       Label(self.welcome_frame, text="Select Difficulty Level:", font=("Comic Sans MS", 14), bg=self.bg_color).pack(pady=10)
        level_frame = Frame(self.welcome_frame, bg=self.bg_color)
        level_frame.pack(pady=10)
-       levels = [("Level E: No Time Limit", 'E'), ("Level 1: 20 Second Limit", 1), ("Level 2: 10 Second Limit", 2)]
-       self.level_var = StringVar()
-       self.level_var.set('E')
+       levels = [("Level 0: No Time Limit", 0), ("Level 1: 20 Second Limit", 1), ("Level 2: 10 Second Limit", 2)]
+       self.level_var = IntVar()
+       self.level_var.set(0)
        for text, level in levels:
-           Radiobutton(level_frame, text=text, variable=self.level_var, value=level, font=("Helvetica", 12), bg=self.bg_color, fg=self.primary_color, activeforeground=self.primary_color, activebackground=self.bg_color).pack(anchor=W, pady=5)
-       Button(self.welcome_frame, text="Start Game", font=("Helvetica", 14, "bold"), bg=self.accent_color, fg="#FFFFFF", command=self.start_game, padx=20, pady=10, relief=RAISED, bd=0).pack(pady=20)
-       Button(self.welcome_frame, text="Help", font=("Helvetica", 12), bg=self.secondary_color, fg="#FFFFFF", command=self.show_help, padx=10, pady=5, relief=RAISED, bd=0).pack(pady=10)
+           Radiobutton(level_frame, text=text, variable=self.level_var, value=level, font=("Comic Sans MS", 12), bg=self.bg_color).pack(anchor=W, pady=5)
+       Button(self.welcome_frame, text="Start Game", font=("Comic Sans MS", 14, "bold"), bg=self.primary_color, fg="white", command=self.start_game, padx=20, pady=10, relief=RAISED).pack(pady=20)
 
 
    def setup_game_screen(self):
        info_frame = Frame(self.game_frame, bg=self.bg_color)
        info_frame.pack(fill=X, pady=10)
-       self.timer_label = Label(info_frame, text="Time: --", font=("Helvetica", 14), bg=self.bg_color, fg=self.primary_color)
+       self.timer_label = Label(info_frame, text="Time: --", font=("Comic Sans MS", 14), bg=self.bg_color, fg=self.primary_color)
        self.timer_label.pack(side=LEFT, padx=20)
-       self.question_counter = Label(info_frame, text="Question: 1/10", font=("Helvetica", 14), bg=self.bg_color, fg=self.primary_color)
+       self.question_counter = Label(info_frame, text="Question: 1/10", font=("Comic Sans MS", 14), bg=self.bg_color)
        self.question_counter.pack(side=RIGHT, padx=20)
-       self.fps_label = Label(info_frame, text="FPS: --", font=("Helvetica", 10), bg=self.bg_color, fg=self.primary_color)
-       self.fps_label.pack(side=RIGHT, padx=20)
-       self.score_label = Label(self.game_frame, text="Score: 0", font=("Helvetica", 16, "bold"), bg=self.bg_color, fg=self.accent_color)
+       self.score_label = Label(self.game_frame, text="Score: 0", font=("Comic Sans MS", 16, "bold"), bg=self.bg_color, fg=self.secondary_color)
        self.score_label.pack(pady=10)
-       self.question_label = Label(self.game_frame, text="", font=("Helvetica", 24, "bold"), bg=self.bg_color, fg=self.primary_color)
+       self.question_label = Label(self.game_frame, text="", font=("Comic Sans MS", 24, "bold"), bg=self.bg_color)
        self.question_label.pack(pady=20)
        self.answer_var = StringVar()
-       self.answer_entry = Entry(self.game_frame, textvariable=self.answer_var, font=("Helvetica", 18), width=10, justify=CENTER, bd=1, relief=SOLID)
+       self.answer_entry = Entry(self.game_frame, textvariable=self.answer_var, font=("Comic Sans MS", 18), width=10, justify=CENTER)
        self.answer_entry.pack(pady=10)
        numpad_frame = Frame(self.game_frame, bg=self.bg_color)
        numpad_frame.pack(pady=20)
        for i in range(3):
            for j in range(3):
                num = i * 3 + j + 1
-               Button(numpad_frame, text=str(num), font=("Helvetica", 14), width=3, height=1, bg=self.bg_color, fg=self.primary_color, bd=1, relief=SOLID, command=lambda n=num: self.add_to_answer(n)).grid(row=i, column=j, padx=5, pady=5)
-       Button(numpad_frame, text="0", font=("Helvetica", 14), width=3, height=1, bg=self.bg_color, fg=self.primary_color, bd=1, relief=SOLID, command=lambda: self.add_to_answer(0)).grid(row=3, column=1, padx=5, pady=5)
-       Button(numpad_frame, text="C", font=("Helvetica", 14), width=3, height=1, bg=self.error_color, fg="#FFFFFF", bd=1, relief=SOLID, command=self.clear_answer).grid(row=3, column=0, padx=5, pady=5)
-       Button(numpad_frame, text="✓", font=("Helvetica", 14), width=3, height=1, bg=self.success_color, fg="#FFFFFF", bd=1, relief=SOLID, command=self.submit_answer).grid(row=3, column=2, padx=5, pady=5)
+               Button(numpad_frame, text=str(num), font=("Comic Sans MS", 14), width=3, height=1, command=lambda n=num: self.add_to_answer(n)).grid(row=i, column=j, padx=5, pady=5)
+       Button(numpad_frame, text="0", font=("Comic Sans MS", 14), width=3, height=1, command=lambda: self.add_to_answer(0)).grid(row=3, column=1, padx=5, pady=5)
+       Button(numpad_frame, text="C", font=("Comic Sans MS", 14), width=3, height=1, bg=self.error_color, fg="white", command=self.clear_answer).grid(row=3, column=0, padx=5, pady=5)
+       Button(numpad_frame, text="✓", font=("Comic Sans MS", 14), width=3, height=1, bg=self.success_color, fg="white", command=self.submit_answer).grid(row=3, column=2, padx=5, pady=5)
 
 
    def setup_results_screen(self):
-       Label(self.results_frame, text="Game Results", font=("Helvetica", 24, "bold"), bg=self.bg_color, fg=self.primary_color).pack(pady=20)
-       self.results_label = Label(self.results_frame, text="", font=("Helvetica", 18), bg=self.bg_color, fg=self.primary_color)
+       Label(self.results_frame, text="Game Results", font=("Comic Sans MS", 24, "bold"), bg=self.bg_color, fg=self.primary_color).pack(pady=20)
+       self.results_label = Label(self.results_frame, text="", font=("Comic Sans MS", 18), bg=self.bg_color)
        self.results_label.pack(pady=20)
-       self.feedback_label = Label(self.results_frame, text="", font=("Helvetica", 16), bg=self.bg_color, fg=self.secondary_color)
+       self.feedback_label = Label(self.results_frame, text="", font=("Comic Sans MS", 16), bg=self.bg_color, fg=self.secondary_color)
        self.feedback_label.pack(pady=10)
        button_frame = Frame(self.results_frame, bg=self.bg_color)
        button_frame.pack(pady=20)
-       Button(button_frame, text="Play Again", font=("Helvetica", 14), bg=self.success_color, fg="#FFFFFF", command=self.restart_game, padx=10, pady=5, bd=0).pack(side=LEFT, padx=10)
-       Button(button_frame, text="Main Menu", font=("Helvetica", 14), bg=self.primary_color, fg="#FFFFFF", command=self.show_welcome_screen, padx=10, pady=5, bd=0).pack(side=RIGHT, padx=10)
+       Button(button_frame, text="Play Again", font=("Comic Sans MS", 14), bg=self.success_color, fg="white", command=self.restart_game, padx=10, pady=5).pack(side=LEFT, padx=10)
+       Button(button_frame, text="Main Menu", font=("Comic Sans MS", 14), bg=self.primary_color, fg="white", command=self.show_welcome_screen, padx=10, pady=5).pack(side=RIGHT, padx=10)
 
 
    def show_welcome_screen(self):
@@ -199,9 +193,6 @@ class MathsGoon:
        self.results_frame.pack_forget()
        self.game_frame.pack(fill=BOTH, expand=True)
        self.answer_entry.focus_set()
-       self.last_fps_time = time.time()
-       self.fps_counter = 0
-       self.update_fps_loop()
 
 
    def show_results_screen(self):
@@ -227,17 +218,6 @@ class MathsGoon:
        self.feedback_label.config(text=feedback)
        self.results_frame.pack(fill=BOTH, expand=True)
        self.play_sound("complete")
-   #ALSO ADDED THE HELP BUTTON
-   def show_help(self):
-       message = ("Maths Goon Instructions:\n\n"
-                  "Answer the arithmetic questions by entering the correct number.\n"
-                  "Select a difficulty level:\n"
-                  "Level E: No Time Limit\n"
-                  "Level 1: 20 Second Limit\n"
-                  "Level 2: 10 Second Limit\n\n"
-                  "Use the on-screen number pad to enter your answer.\n"
-                  "Good luck!")
-       messagebox.showinfo("Help", message)
 
 
    def start_game(self):
@@ -321,17 +301,6 @@ class MathsGoon:
            self.display_question()
        else:
            self.show_results_screen()
- #ADDED THE FPS COUNTER
-   def update_fps_loop(self):
-       self.fps_counter += 1
-       current_time = time.time()
-       elapsed = current_time - self.last_fps_time
-       if elapsed >= 1.0:
-           fps = self.fps_counter / elapsed
-           self.fps_label.config(text=f"FPS: {int(fps)}")
-           self.fps_counter = 0
-           self.last_fps_time = current_time
-       self.root.after(16, self.update_fps_loop)
 
 
    def play_sound(self, sound_type):
@@ -344,7 +313,6 @@ class MathsGoon:
            "tick": "sounds/tick.wav",
            "complete": "sounds/complete.wav"
        }
-      
 
 
 if __name__ == "__main__":
